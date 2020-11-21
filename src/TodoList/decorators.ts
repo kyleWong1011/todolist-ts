@@ -9,7 +9,7 @@ export function addTodo(todoData: ITodo[]): Function {
     // 暂存调用方法
     const _origin = descriptor.value // addItem()
 
-    // 这里不能使用箭头函数
+    // 这里上下文捕获，不能使用箭头函数
     descriptor.value = function (todo: ITodo): void {
       const _todo: ITodo | undefined = todoData.find(
         (item: ITodo) => item.content === todo.content
@@ -31,10 +31,9 @@ export function removeTodo(todoData: ITodo[]): Function {
     methodName: string,
     descriptor: PropertyDescriptor
   ) {
-    // 暂存调用方法
     const _origin = descriptor.value // removeItem()
 
-    descriptor.value = function (id): void {
+    descriptor.value = function (id: number): void {
       todoData = todoData.filter((item: ITodo) => item.id !== id)
       _origin.call(this, id)
     }
@@ -47,8 +46,9 @@ export function toggleTodo(todoData: ITodo[]): Function {
     methodName: string,
     descriptor: PropertyDescriptor
   ) {
-    const _origin = descriptor.value // removeItem()
-    descriptor.value = function (id): void {
+    const _origin = descriptor.value // toggleItem()
+
+    descriptor.value = function (id: number): void {
       todoData = todoData.map((item: ITodo) => {
         if (item.id === id) {
           item.complated = !item.complated
