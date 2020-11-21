@@ -17,7 +17,7 @@ import TodoList, { ITodo } from './TodoList'
 
   function handleAddItemClick(): void {
     const value = oInput.value.trim()
-    if (!value.length) return
+    if (!value.length) return alert('不能为空')
     todoList.addItem(<ITodo>{
       id: new Date().getTime(),
       content: value,

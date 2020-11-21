@@ -7,7 +7,7 @@ export function renderTodoItem({ id, content, complated }: ITodo) {
       class="checkbox" />
     <span style="text-decoration:${
       complated ? 'line-through' : ''
-    }">${content}</span>
+    }" class="todo-content">${content}</span>
     <button data-id=${id} class="remove-btn">删除</button>
   `
 }
