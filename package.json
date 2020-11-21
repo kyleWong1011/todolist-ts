@@ -1,0 +1,25 @@
+{
+  "name": "todolist-ts",
+  "version": "1.0.0",
+  "description": "多种实现todolist",
+  "main": "index.js",
+  "bin": {
+    "node-cli-demo": "./bin/node-cli-demo.js"
+  },
+  "scripts": {
+    "start": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyleWong1011/todolist-ts.git"
+  },
+  "author": "KyleWong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kyleWong1011/todolist-ts/issues"
+  },
+  "homepage": "https://github.com/kyleWong1011/todolist-ts#readme",
+  "dependencies": {
+    "vite": "^1.0.0-rc.9"
+  }
+}
