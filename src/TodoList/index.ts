@@ -1,5 +1,5 @@
-import { renderTodoItem } from './template'
-import { addTodo, removeTodo, toggleTodo } from './decorators'
+import Input, { InputOption } from './components/Input'
+import List from './components/List'
 
 export interface ITodo {
   id: number
@@ -7,58 +7,46 @@ export interface ITodo {
   complated: boolean
 }
 
-const todoData: ITodo[] = []
-
 class TodoList {
-  private oTodoList: HTMLElement
-  private static instance: TodoList
+  private el: HTMLElement
+  private todoData: ITodo[]
+  private input: Input
+  private list: List
+  private todoWrapper: HTMLElement
 
-  constructor(oTodoList: HTMLElement) {
-    this.oTodoList = oTodoList
+  constructor(el: HTMLElement, todoData: ITodo[]) {
+    this.el = el
+    this.todoData = todoData
+    this.todoWrapper = document.createElement('div')
+    this.todoWrapper.className = 'todo'
+    this.init()
   }
 
-  public static create(oTodoList: HTMLElement): TodoList {
-    // 创建单例模式
-    if (!TodoList.instance) {
-      TodoList.instance = new TodoList(oTodoList)
-    }
-    return TodoList.instance
+  public init() {
+    this.createComponents()
+    this.render()
+    this.bindEvent()
+    console.log('init')
   }
 
-  @addTodo(todoData)
-  public addItem(todo: ITodo): void {
-    const oItem: HTMLElement = document.createElement('div')
-    oItem.className = 'todo-item'
-    oItem.innerHTML = renderTodoItem(todo)
-    this.oTodoList.appendChild(oItem)
-  }
-
-  @removeTodo(todoData)
-  public removeItem(id: number): void {
-    // const oItems:HTMLCollection = this.oTodoList.querySelectorAll('.todo-item')
-    const oItems: HTMLCollection = document.getElementsByClassName('todo-item')
-    Array.from(oItems).forEach(oItem => {
-      const _id = +(oItem.querySelector('.remove-btn') as HTMLButtonElement)
-        .dataset.id
-      if (id === _id) {
-        oItem.remove()
-      }
+  public createComponents() {
+    this.input = new Input(<InputOption>{
+      wrapperEl: this.todoWrapper,
+      placeholderText: '请输入',
+      buttonText: '新增'
+    })
+    this.list = new List({
+      wrapperEl: this.todoWrapper,
+      todoData: this.todoData
     })
   }
 
-  @toggleTodo(todoData)
-  public toggleItem(id: number, complated?: boolean): void {
-    const oItems: HTMLCollection = document.getElementsByClassName('todo-item')
-    Array.from(oItems).forEach(oItem => {
-      const _id = +(oItem.querySelector('.remove-btn') as HTMLButtonElement)
-        .dataset.id
-      if (id === _id) {
-        const oContent: HTMLElement = oItem.querySelector('.todo-content')
+  public render() {
+    this.el.appendChild(this.todoWrapper)
+  }
 
-        console.log({ oContent })
-        oContent.style.textDecorationLine = complated ? 'line-through' : ''
-      }
-    })
+  public bindEvent() {
+    console.log('bindEvent')
   }
 }
 
