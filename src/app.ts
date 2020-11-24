@@ -1,51 +1,50 @@
 import TodoList, { EVENT_TYPES, ITodo } from './TodoList'
+import { init } from 'snabbdom/build/package/init'
+// import { classModule } from 'snabbdom/build/package/modules/class'
+// import { propsModule } from 'snabbdom/build/package/modules/props'
+// import { styleModule } from 'snabbdom/build/package/modules/style'
+// import { eventListenersModule } from 'snabbdom/build/package/modules/eventlisteners'
+import { h } from 'snabbdom/build/package/h'
+
+export const patch = init([])
 ;(doc => {
-  const oInput: HTMLInputElement = doc.querySelector('.input')
-  const oAddBtn: HTMLButtonElement = doc.querySelector('.add-btn')
-  const oTodoList: HTMLElement = doc.querySelector('.todo-list')
+  const patch = init([])
 
-  const todoData: ITodo[] = [{ id: 123, content: 'asd', complated: false }]
+  let vnode = h('div#container.cls', [
+    h('h1', 'Hello Sabbdom'),
+    h('p', '这是一个p标签')
+  ])
 
-  const todoList = TodoList.create(oTodoList)
+  let app = document.querySelector('#app')
 
-  function init(): void {
-    bindEvent()
-  }
+  let oldVnode = patch(app, vnode)
 
-  function bindEvent(): void {
-    oAddBtn.addEventListener('click', handleAddBtnClick, false)
-    oTodoList.addEventListener('click', handleListClick, false)
-  }
+  // 对比差异更新视图
+  // 假设有个操作要更新DOM
+  // 更新DOM子元素
+  setTimeout(() => {
+    const newVnode = h('div.todo', [
+      h(
+        'div.todo-input',
+        h('input.input', {
+          style: {
+            backgroundColor: 'red'
+          },
+          placeholder:''
+        })
+      ),
+      h('div.todo-list', h('div.todo-list'))
+    ])
+    vnode = patch(oldVnode, newVnode)
 
-  function handleAddBtnClick(): void {
-    const value = oInput.value.trim()
-    if (!value) return alert('输入不能为空')
+    // 删除DOM（官方示例是个错误示例，已经被删掉）
+    // 报错：Cannot read property 'key' of null
+    // patch(endVnode, null)
 
-    todoList.notify<ITodo>(EVENT_TYPES.ADD, {
-      id: new Date().getTime(),
-      complated: false,
-      content: value
-    })
+    // 通过创建注释节点来实现
+    // vnode = patch(vnode, h('!'))
 
-    oInput.value = ''
-  }
-
-  function handleListClick(ev: MouseEvent): void {
-    const target = ev.target as HTMLElement
-    const tagName = target.tagName.toLowerCase()
-    const id = +target.dataset.id
-
-    switch (tagName) {
-      case 'input':
-        todoList.notify<number>(EVENT_TYPES.TOGGLE, id)
-        break
-      case 'button':
-        todoList.notify<number>(EVENT_TYPES.REMOVE, id)
-        break
-      default:
-        break
-    }
-  }
-
-  init()
+    // Vnode节点仍然存在
+    // patch(vnode, h('div', '又在原位置出现'))
+  }, 20)
 })(document)
