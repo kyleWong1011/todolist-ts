@@ -1,5 +1,4 @@
-import { ITodo } from './TodoList'
-import TodoEvent from './TodoList/TodoEvent'
+import TodoList, { EVENT_TYPES, ITodo } from './TodoList'
 ;(doc => {
   const oInput: HTMLInputElement = doc.querySelector('.input')
   const oAddBtn: HTMLButtonElement = doc.querySelector('.add-btn')
@@ -7,7 +6,7 @@ import TodoEvent from './TodoList/TodoEvent'
 
   const todoData: ITodo[] = [{ id: 123, content: 'asd', complated: false }]
 
-  const todoEvent: TodoEvent = new TodoEvent(todoData, oTodoList)
+  const todoList = TodoList.create(oTodoList)
 
   function init(): void {
     bindEvent()
@@ -21,11 +20,13 @@ import TodoEvent from './TodoList/TodoEvent'
   function handleAddBtnClick(): void {
     const value = oInput.value.trim()
     if (!value) return alert('输入不能为空')
-    todoEvent.addTodo(<ITodo>{
+
+    todoList.notify<ITodo>(EVENT_TYPES.ADD, {
       id: new Date().getTime(),
-      content: value,
-      complated: false
+      complated: false,
+      content: value
     })
+
     oInput.value = ''
   }
 
@@ -36,10 +37,10 @@ import TodoEvent from './TodoList/TodoEvent'
 
     switch (tagName) {
       case 'input':
-        todoEvent.toggleTodo(target, id)
+        todoList.notify<number>(EVENT_TYPES.TOGGLE, id)
         break
       case 'button':
-        todoEvent.removeTodo(target, id)
+        todoList.notify<number>(EVENT_TYPES.REMOVE, id)
         break
       default:
         break
