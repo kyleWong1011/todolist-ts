@@ -45,7 +45,7 @@ export default class TodoList {
     this.todoDom = TodoDom.create(this.wrapperEl)
 
     for (const key in EVENT_TYPES) {
-      this.initHandlers(EVENT_TYPES[key])
+      this.initHandlers(EVENT_TYPES[key as never] )
     }
   }
 
