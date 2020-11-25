@@ -10,13 +10,6 @@ export enum EVENT_TYPES {
   TOGGLE = 'toggle'
 }
 
-// type EVENTS = 'add' | 'remove' | 'toggle'
-// interface EVENTS {
-//   ADD: string
-//   REMOVE: string
-//   TOGGLE: string
-// }
-
 import TodoEvent from './TodoEvent'
 import TodoDom from './TodoDom'
 export default class TodoList {
@@ -33,7 +26,7 @@ export default class TodoList {
     this.init()
   }
 
-  public static create(wrapperEl: HTMLElement) {
+  public static create(wrapperEl: HTMLElement): TodoList {
     if (!TodoList.instance) {
       TodoList.instance = new TodoList(wrapperEl)
     }
@@ -45,7 +38,7 @@ export default class TodoList {
     this.todoDom = TodoDom.create(this.wrapperEl)
 
     for (const key in EVENT_TYPES) {
-      this.initHandlers(EVENT_TYPES[key as never] )
+      this.initHandlers(EVENT_TYPES[key as never])
     }
   }
 

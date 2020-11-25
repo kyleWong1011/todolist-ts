@@ -34,7 +34,7 @@ export default class TodoDom {
     this.wrapperEl = wrapperEl
   }
 
-  public static create(wrapperEl: HTMLElement) {
+  public static create(wrapperEl: HTMLElement): TodoDom {
     if (!TodoDom.instance) {
       TodoDom.instance = new TodoDom(wrapperEl)
     }
